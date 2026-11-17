@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connected · Aayush Clip Uploader</title><style>
+:root{--bg:#16161a;--text:#ececf1;--muted:#9a9aa6;--gold:#dec48c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:680px;margin:0 auto;padding:48px 16px}h1{font-size:28px;margin:0 0 8px}h2{font-size:18px;margin:32px 0 8px}
+p,li{color:var(--text)}.muted{color:var(--muted)}a{color:var(--gold)}
+code{display:block;background:#222228;border:1px solid #333;border-radius:8px;padding:14px;font-size:15px;word-break:break-all;margin:12px 0}
+button{background:var(--gold);color:var(--bg);border:0;border-radius:8px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer}
+</style></head><body><main>
+<h1 id="h">Almost done</h1>
+<p id="msg" class="muted">Copy this code and paste it into the clips page on your server (it expires in a few minutes):</p>
+<code id="code"></code>
+<button id="copy">Copy code</button>
+<script>
+const q = new URLSearchParams(location.search);
+const code = q.get("code"), err = q.get("error_description") || q.get("error");
+if (code) {
+  document.getElementById("code").textContent = code + "|" + (q.get("state") || "");
+} else {
+  document.getElementById("h").textContent = "Not connected";
+  document.getElementById("msg").textContent = err ? "TikTok said: " + err : "No code here. Start again from the clips page.";
+  document.getElementById("code").remove(); document.getElementById("copy").remove();
+}
+document.getElementById("copy")?.addEventListener("click", e => {
+  const r = document.createRange(); r.selectNodeContents(document.getElementById("code"));
+  getSelection().removeAllRanges(); getSelection().addRange(r);
+  try { document.execCommand("copy"); e.target.textContent = "Copied"; } catch (_) { e.target.textContent = "Selected, now copy"; }
+});
+</script>
+</main></body></html>
